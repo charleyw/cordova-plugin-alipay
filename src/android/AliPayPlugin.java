@@ -3,7 +3,9 @@ package wang.imchao.plugin.alipay;
 import com.alipay.sdk.app.PayTask;
 
 import org.apache.cordova.CallbackContext;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 
 import java.io.UnsupportedEncodingException;
@@ -17,11 +19,19 @@ public class AliPayPlugin extends CordovaPlugin {
     private static String TAG = "AliPayPlugin";
 
     //商户PID
-    public static final String PARTNER = "";
+    private String partner = "";
     //商户收款账号
-    public static final String SELLER = "";
+    private String seller = "";
     //商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE = "";
+    private String privateKey = "";
+
+    @Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        partner = webView.getPreferences().getString("partner", "");
+        seller = webView.getPreferences().getString("seller", "");
+        privateKey = webView.getPreferences().getString("privateKey", "");
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
@@ -64,10 +74,10 @@ public class AliPayPlugin extends CordovaPlugin {
      */
     public String getOrderInfo(String subject, String body, String price) {
         // 签约合作者身份ID
-        String orderInfo = "partner=" + "\"" + PARTNER + "\"";
+        String orderInfo = "partner=" + "\"" + partner + "\"";
 
         // 签约卖家支付宝账号
-        orderInfo += "&seller_id=" + "\"" + SELLER + "\"";
+        orderInfo += "&seller_id=" + "\"" + seller + "\"";
 
         // 商户网站唯一订单号
         orderInfo += "&out_trade_no=" + "\"" + getOutTradeNo() + "\"";
@@ -136,7 +146,7 @@ public class AliPayPlugin extends CordovaPlugin {
      *            待签名订单信息
      */
     public String sign(String content) {
-        return SignUtils.sign(content, RSA_PRIVATE);
+        return SignUtils.sign(content, privateKey);
     }
 
     /**
