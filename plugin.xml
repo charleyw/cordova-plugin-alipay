@@ -57,8 +57,12 @@
 
   <platform name="ios">
     <config-file target="config.xml" parent="/widget">
+      <preference name="partner" value="$PARTNER_ID" />
+      <preference name="seller" value="$SELLER_ACCOUNT" />
+      <preference name="privateKey" value="$PRIVATE_KEY" />
       <feature name="AliPay">
         <param name="ios-package" value="PgyerPlugin" />
+        <param name="onload" value="true" />
       </feature>
     </config-file>
 
