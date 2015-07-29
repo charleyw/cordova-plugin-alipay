@@ -6,6 +6,13 @@
 
 @implementation PgyerPlugin
 
+-(void)pluginInitialize{
+    CDVViewController *viewController = (CDVViewController *)self.viewController;
+    self.partner = [viewController.settings objectForKey:@"partner"];
+    self.seller = [viewController.settings objectForKey:@"seller"];
+    self.privateKey = [viewController.settings objectForKey:@"privateKey"];
+}
+
 - (NSString *)generateTradeNO
 {
     static int kNumber = 15;
@@ -30,20 +37,10 @@
      *签约后，支付宝会为每个商户分配一个唯一的 parnter 和 seller。
      */
 
-    /*============================================================================*/
-    /*=======================需要填写商户app申请的===================================*/
-    /*============================================================================*/
-    NSString *partner = @"";
-    NSString *seller = @"";
-    NSString *privateKey = @"";
-    /*============================================================================*/
-    /*============================================================================*/
-    /*============================================================================*/
-
     //partner和seller获取失败,提示
-    if ([partner length] == 0 ||
-        [seller length] == 0 ||
-        [privateKey length] == 0)
+    if ([self.partner length] == 0 ||
+        [self.seller length] == 0 ||
+        [self.privateKey length] == 0)
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
                                                         message:@"缺少partner或者seller或者私钥。"
@@ -59,8 +56,8 @@
      */
     //将商品信息赋予AlixPayOrder的成员变量
     Order *order = [[Order alloc] init];
-    order.partner = partner;
-    order.seller = seller;
+    order.partner = self.partner;
+    order.seller = self.seller;
     order.tradeNO = [self generateTradeNO]; //订单ID（由商家自行制定）
     order.productName = @"Ceshibiaoti"; //商品标题
     order.productDescription = @"ceshi miaoshu"; //商品描述
@@ -81,7 +78,7 @@
     NSLog(@"orderSpec = %@",orderSpec);
 
     //获取私钥并将商户信息签名,外部商户可以根据情况存放私钥和签名,只需要遵循RSA签名规范,并将签名字符串base64编码和UrlEncode
-    id<DataSigner> signer = CreateRSADataSigner(privateKey);
+    id<DataSigner> signer = CreateRSADataSigner(self.privateKey);
     NSString *signedString = [signer signString:orderSpec];
 
     //将签名成功字符串格式化为订单字符串,请严格按照该格式
