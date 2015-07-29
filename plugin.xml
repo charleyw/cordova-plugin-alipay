@@ -26,6 +26,7 @@
       <preference name="privateKey" value="$PRIVATE_KEY" />
       <feature name="AliPay">
         <param name="android-package" value="wang.imchao.plugin.alipay.AliPayPlugin"/>
+        <param name="onload" value="true" />
       </feature>
     </config-file>
 
