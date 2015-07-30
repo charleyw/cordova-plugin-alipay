@@ -1,6 +1,6 @@
 #import <Cordova/CDV.h>
 
-@interface PgyerPlugin : CDVPlugin
+@interface AlipayPlugin : CDVPlugin
 
 @property(nonatomic,strong)NSString *partner;
 @property(nonatomic,strong)NSString *seller;

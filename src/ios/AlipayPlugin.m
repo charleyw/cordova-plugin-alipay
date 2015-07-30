@@ -1,16 +1,16 @@
-#import "PgyerPlugin.h"
+#import "AlipayPlugin.h"
 #import "Order.h"
 
 #import "DataSigner.h"
 #import <AlipaySDK/AlipaySDK.h>
 
-@implementation PgyerPlugin
+@implementation AlipayPlugin
 
 -(void)pluginInitialize{
     CDVViewController *viewController = (CDVViewController *)self.viewController;
     self.partner = [viewController.settings objectForKey:@"partner"];
     self.seller = [viewController.settings objectForKey:@"seller"];
-    self.privateKey = [viewController.settings objectForKey:@"privateKey"];
+    self.privateKey = [viewController.settings objectForKey:@"private_key"];
 }
 
 - (NSString *)generateTradeNO
