@@ -11,6 +11,8 @@
     self.partner = [viewController.settings objectForKey:@"partner"];
     self.seller = [viewController.settings objectForKey:@"seller"];
     self.privateKey = [viewController.settings objectForKey:@"private_key"];
+    NSArray *urls = [[NSArray alloc] initWithArray:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"]];
+    self.appScheme = [[[urls objectAtIndex:0] objectForKey:@"CFBundleURLSchemes"] objectAtIndex:0];
 }
 
 - (NSString *)generateTradeNO
@@ -70,9 +72,6 @@
     order.itBPay = @"30m";
     order.showUrl = @"m.alipay.com";
 
-    //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"alisdkdemo";
-
     //将商品信息拼接成字符串
     NSString *orderSpec = [order description];
     NSLog(@"orderSpec = %@",orderSpec);
@@ -87,7 +86,7 @@
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
                        orderSpec, signedString, @"RSA"];
 
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+        [[AlipaySDK defaultService] payOrder:orderString fromScheme:self.appScheme callback:^(NSDictionary *resultDic) {
             NSLog(@"reslut = %@",resultDic);
         }];
 
