@@ -11,24 +11,7 @@
     self.partner = [viewController.settings objectForKey:@"partner"];
     self.seller = [viewController.settings objectForKey:@"seller"];
     self.privateKey = [viewController.settings objectForKey:@"private_key"];
-    NSArray *urls = [[NSArray alloc] initWithArray:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLTypes"]];
-    self.appScheme = [[[urls objectAtIndex:0] objectForKey:@"CFBundleURLSchemes"] objectAtIndex:0];
-}
-
-- (NSString *)generateTradeNO
-{
-    static int kNumber = 15;
-
-    NSString *sourceStr = @"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    NSMutableString *resultStr = [[NSMutableString alloc] init];
-    srand(time(0));
-    for (int i = 0; i < kNumber; i++)
-    {
-        unsigned index = rand() % [sourceStr length];
-        NSString *oneStr = [sourceStr substringWithRange:NSMakeRange(index, 1)];
-        [resultStr appendString:oneStr];
-    }
-    return resultStr;
+    self.appScheme = @"juduoduo://test";
 }
 
 - (void) pay:(CDVInvokedUrlCommand*)command
@@ -56,15 +39,24 @@
     /*
      *生成订单信息及签名
      */
-    //将商品信息赋予AlixPayOrder的成员变量
+
+    //从API请求获取支付信息
+    NSMutableDictionary *args = [command argumentAtIndex:0];
+    NSString   *tradeId  = [args objectForKey:@"tradeNo"];
+    NSString   *subject  = [args objectForKey:@"subject"];
+    NSString   *body     = [args objectForKey:@"body"];
+    NSString   *price    = [args objectForKey:@"price"];
+    NSString   *fromUrlScheme    = [args objectForKey:@"fromUrlScheme"];
+    NSString   *notifyUrl    = [args objectForKey:@"notifyUrl"];
+
     Order *order = [[Order alloc] init];
     order.partner = self.partner;
     order.seller = self.seller;
-    order.tradeNO = [self generateTradeNO]; //订单ID（由商家自行制定）
-    order.productName = @"Ceshibiaoti"; //商品标题
-    order.productDescription = @"ceshi miaoshu"; //商品描述
-    order.amount = @"0.01"; //商品价格
-    order.notifyURL =  @"http://www.xxx.com"; //回调URL
+    order.tradeNO = tradeId; //订单ID（由商家自行制定）
+    order.productName = subject; //商品标题
+    order.productDescription = body; //商品描述
+    order.amount = price; //商品价格
+    order.notifyURL =  notifyUrl; //回调URL
 
     order.service = @"mobile.securitypay.pay";
     order.paymentType = @"1";
@@ -86,7 +78,7 @@
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
                        orderSpec, signedString, @"RSA"];
 
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:self.appScheme callback:^(NSDictionary *resultDic) {
+        [[AlipaySDK defaultService] payOrder:orderString fromScheme:fromUrlScheme callback:^(NSDictionary *resultDic) {
             NSLog(@"reslut = %@",resultDic);
         }];
 
