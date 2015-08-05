@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
         id="wang.imchao.plugin.alipay"
-        version="0.0.1">
+        version="0.0.2">
 
   <name>AlipayPlugin</name>
+  <license>MIT license</license>
+  <description>支付宝支付插件，alipay payment</description>
+  <keywords>alipay, payment</keywords>
+  <repo>https://github.com/charleyw/cordova-plugin-alipay</repo>
+  <issue>https://github.com/charleyw/cordova-plugin-alipay/issues</issue>
 
   <engines>
     <engine name="cordova" version=">=3.4.0"/>
