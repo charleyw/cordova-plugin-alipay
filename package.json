@@ -1,6 +1,6 @@
 {
     "version": "0.0.2",
-    "name": "wang.imchao.plugin.alipay",
+    "name": "cordova-plugin-alipay",
     "cordova_name": "AlipayPlugin",
     "description": "支付宝支付插件，alipay payment",
     "license": "MIT license",
