@@ -14,10 +14,13 @@ Cordova 支付宝支付插件
 		git clone https://github.com/charleyw/cordova-plugin-alipay.git && cd cordova-plugin-alipay && export CORDOVA_PLUGIN_DIR=$(pwd)
 
 2. 修改$CORDOVA_PLUGIN_DIR/plugin.xml，将
-		<preference name="PRIVATE_KEY"/>
+
+		<preference name="private_key" value="$PRIVATE_KEY" />
 改成
+
 		<preference name="PRIVATE_KEY" value="你生成的private key"/>
 
+	**注意**：总共有两处
 3. 安装
 		cordova plugin add $CORDOVA_PLUGIN_DIR --variable PARTNER_ID=[你的商户PID可以在账户中查询] --variable SELLER_ACCOUNT=[你的商户支付宝帐号]
 

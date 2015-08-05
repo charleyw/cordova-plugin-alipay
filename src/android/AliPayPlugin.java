@@ -1,5 +1,8 @@
 package wang.imchao.plugin.alipay;
 
+import android.content.Intent;
+import android.net.Uri;
+
 import com.alipay.sdk.app.PayTask;
 
 import org.apache.cordova.CallbackContext;
@@ -7,6 +10,8 @@ import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -35,11 +40,23 @@ public class AliPayPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
-        this.pay();
+        try {
+            JSONObject arguments = args.getJSONObject(0);
+            String tradeNo = arguments.getString("tradeNo");
+            String subject = arguments.getString("subject");
+            String body = arguments.getString("body");
+            String price = arguments.getString("price");
+            String fromUrlScheme = arguments.getString("fromUrlScheme");
+            String notifyUrl = arguments.getString("notifyUrl");
+            this.pay(tradeNo, subject, body, price, fromUrlScheme, notifyUrl);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 
-    public void pay() {
+    public void pay(String tradeNo, String Subject, String body, String price, String fromUrlScheme, String notifyUrl) {
         // 订单
         String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
 
@@ -63,6 +80,10 @@ public class AliPayPlugin extends CordovaPlugin {
                 PayTask alipay = new PayTask(cordova.getActivity());
                 // 调用支付接口，获取支付结果
                 String result = alipay.pay(payInfo);
+                Intent i = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("juduoduo://test?"+ result));
+                cordova.getActivity().startActivity(i);
+
             }
         });
     }
