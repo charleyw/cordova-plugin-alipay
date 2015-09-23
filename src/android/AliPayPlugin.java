@@ -56,9 +56,9 @@ public class AliPayPlugin extends CordovaPlugin {
         return true;
     }
 
-    public void pay(String tradeNo, String Subject, String body, String price, String fromUrlScheme, String notifyUrl) {
+    public void pay(String tradeNo, String subject, String body, String price, final String fromUrlScheme, String notifyUrl) {
         // 订单
-        String orderInfo = getOrderInfo("测试的商品", "该测试商品的详细描述", "0.01");
+        String orderInfo = createRequestParameters(subject, body, price, tradeNo, notifyUrl);
 
         // 对订单做RSA 签名
         String sign = sign(orderInfo);
@@ -81,7 +81,7 @@ public class AliPayPlugin extends CordovaPlugin {
                 // 调用支付接口，获取支付结果
                 String result = alipay.pay(payInfo);
                 Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("juduoduo://test?"+ result));
+                        Uri.parse(fromUrlScheme + result));
                 cordova.getActivity().startActivity(i);
 
             }
@@ -93,7 +93,7 @@ public class AliPayPlugin extends CordovaPlugin {
      * create the order info. 创建订单信息
      *
      */
-    public String getOrderInfo(String subject, String body, String price) {
+    public String createRequestParameters(String subject, String body, String price, String tradeNo, String notifyUrl) {
         // 签约合作者身份ID
         String orderInfo = "partner=" + "\"" + partner + "\"";
 
@@ -101,7 +101,7 @@ public class AliPayPlugin extends CordovaPlugin {
         orderInfo += "&seller_id=" + "\"" + seller + "\"";
 
         // 商户网站唯一订单号
-        orderInfo += "&out_trade_no=" + "\"" + getOutTradeNo() + "\"";
+        orderInfo += "&out_trade_no=" + "\"" + tradeNo + "\"";
 
         // 商品名称
         orderInfo += "&subject=" + "\"" + subject + "\"";
@@ -113,7 +113,7 @@ public class AliPayPlugin extends CordovaPlugin {
         orderInfo += "&total_fee=" + "\"" + price + "\"";
 
         // 服务器异步通知页面路径
-        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
+        orderInfo += "&notify_url=" + "\"" + notifyUrl
                 + "\"";
 
         // 服务接口名称， 固定值
@@ -142,22 +142,6 @@ public class AliPayPlugin extends CordovaPlugin {
         // orderInfo += "&paymethod=\"expressGateway\"";
 
         return orderInfo;
-    }
-
-    /**
-     * get the out_trade_no for an order. 生成商户订单号，该值在商户端应保持唯一（可自定义格式规范）
-     *
-     */
-    public String getOutTradeNo() {
-        SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss",
-                Locale.getDefault());
-        Date date = new Date();
-        String key = format.format(date);
-
-        Random r = new Random();
-        key = key + r.nextInt();
-        key = key.substring(0, 15);
-        return key;
     }
 
     /**
