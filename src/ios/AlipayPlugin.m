@@ -11,7 +11,6 @@
     self.partner = [viewController.settings objectForKey:@"partner"];
     self.seller = [viewController.settings objectForKey:@"seller"];
     self.privateKey = [viewController.settings objectForKey:@"private_key"];
-    self.appScheme = @"juduoduo://test";
 }
 
 - (void) pay:(CDVInvokedUrlCommand*)command
