@@ -78,9 +78,27 @@
                        orderSpec, signedString, @"RSA"];
 
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:fromUrlScheme callback:^(NSDictionary *resultDic) {
+            if ([[resultDic objectForKey:@"resultStatus"]  isEqual: @"9000"]) {
+                [self successWithCallbackID:command.callbackId withMessage:@"支付成功"];
+            } else {
+                [self failWithCallbackID:command.callbackId withMessage:@"支付失败"];
+            }
+            
             NSLog(@"reslut = %@",resultDic);
         }];
 
     }
+}
+
+- (void)successWithCallbackID:(NSString *)callbackID withMessage:(NSString *)message
+{
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
+}
+
+- (void)failWithCallbackID:(NSString *)callbackID withMessage:(NSString *)message
+{
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
 }
 @end
