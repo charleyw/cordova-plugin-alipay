@@ -1,7 +1,6 @@
 package wang.imchao.plugin.alipay;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.text.TextUtils;
 
 import com.alipay.sdk.app.PayTask;
 
@@ -15,10 +14,6 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
 
 public class AliPayPlugin extends CordovaPlugin {
     private static String TAG = "AliPayPlugin";
@@ -48,15 +43,16 @@ public class AliPayPlugin extends CordovaPlugin {
             String price = arguments.getString("price");
             String fromUrlScheme = arguments.getString("fromUrlScheme");
             String notifyUrl = arguments.getString("notifyUrl");
-            this.pay(tradeNo, subject, body, price, fromUrlScheme, notifyUrl);
+            this.pay(tradeNo, subject, body, price, fromUrlScheme, notifyUrl, callbackContext);
         } catch (JSONException e) {
+            callbackContext.error(new JSONObject());
             e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    public void pay(String tradeNo, String subject, String body, String price, final String fromUrlScheme, String notifyUrl) {
+    public void pay(String tradeNo, String subject, String body, String price, final String fromUrlScheme, String notifyUrl, final CallbackContext callbackContext) {
         // 订单
         String orderInfo = createRequestParameters(subject, body, price, tradeNo, notifyUrl);
 
@@ -80,18 +76,24 @@ public class AliPayPlugin extends CordovaPlugin {
                 PayTask alipay = new PayTask(cordova.getActivity());
                 // 调用支付接口，获取支付结果
                 String result = alipay.pay(payInfo);
-                Intent i = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(fromUrlScheme + result));
-                cordova.getActivity().startActivity(i);
-
+                PayResult payResult = new PayResult(result);
+                if (TextUtils.equals(payResult.getResultStatus(), "9000")) {
+                    callbackContext.success(payResult.getMemo());
+                } else {
+                    // 判断resultStatus 为非“9000”则代表可能支付失败
+                    // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
+                    if (TextUtils.equals(payResult.getResultStatus(), "8000")) {
+                        callbackContext.success(payResult.getMemo());
+                    } else {
+                        callbackContext.error(payResult.getMemo());
+                    }
+                }
             }
         });
     }
 
-
     /**
      * create the order info. 创建订单信息
-     *
      */
     public String createRequestParameters(String subject, String body, String price, String tradeNo, String notifyUrl) {
         // 签约合作者身份ID
@@ -147,8 +149,7 @@ public class AliPayPlugin extends CordovaPlugin {
     /**
      * sign the order info. 对订单信息进行签名
      *
-     * @param content
-     *            待签名订单信息
+     * @param content 待签名订单信息
      */
     public String sign(String content) {
         return SignUtils.sign(content, privateKey);
@@ -156,7 +157,6 @@ public class AliPayPlugin extends CordovaPlugin {
 
     /**
      * get the sign type we use. 获取签名方式
-     *
      */
     public String getSignType() {
         return "sign_type=\"RSA\"";

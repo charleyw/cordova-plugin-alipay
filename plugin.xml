@@ -55,6 +55,7 @@
     <source-file src="src/android/libs/alipaySDK-20150724.jar" target-dir="libs"/>
 
     <source-file src="src/android/AliPayPlugin.java" target-dir="src/wang/imchao/plugin/alipay"/>
+    <source-file src="src/android/PayResult.java" target-dir="src/wang/imchao/plugin/alipay"/>
     <source-file src="src/android/Base64.java" target-dir="src/wang/imchao/plugin/alipay"/>
     <source-file src="src/android/SignUtils.java" target-dir="src/wang/imchao/plugin/alipay"/>
   </platform>
