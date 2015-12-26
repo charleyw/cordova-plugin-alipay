@@ -71,6 +71,19 @@
       </feature>
     </config-file>
 
+    <config-file target="*-Info.plist" parent="CFBundleURLTypes">
+      <array>
+          <dict>
+              <key>CFBundleURLName</key>
+              <string>alipay</string>
+              <key>CFBundleURLSchemes</key>
+              <array>
+                  <string>$PARTNER_ID</string>
+              </array>
+          </dict>
+      </array>
+    </config-file>
+
     <framework src="CoreTelephony.framework" weak="true" />
     <framework src="Security.framework" weak="true" />
     <framework src="SystemConfiguration.framework" weak="true" />

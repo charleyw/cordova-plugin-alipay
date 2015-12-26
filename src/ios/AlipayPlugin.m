@@ -15,6 +15,7 @@
 
 - (void) pay:(CDVInvokedUrlCommand*)command
 {
+    self.currentCallbackId = command.callbackId;
 
     /*
      *商户的唯一的parnter和seller。
@@ -45,7 +46,6 @@
     NSString   *subject  = [args objectForKey:@"subject"];
     NSString   *body     = [args objectForKey:@"body"];
     NSString   *price    = [args objectForKey:@"price"];
-    NSString   *fromUrlScheme    = [args objectForKey:@"fromUrlScheme"];
     NSString   *notifyUrl    = [args objectForKey:@"notifyUrl"];
 
     Order *order = [[Order alloc] init];
@@ -77,16 +77,32 @@
         orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",
                        orderSpec, signedString, @"RSA"];
 
-        [[AlipaySDK defaultService] payOrder:orderString fromScheme:fromUrlScheme callback:^(NSDictionary *resultDic) {
+        [[AlipaySDK defaultService] payOrder:orderString fromScheme:self.partner callback:^(NSDictionary *resultDic) {
             if ([[resultDic objectForKey:@"resultStatus"]  isEqual: @"9000"]) {
-                [self successWithCallbackID:command.callbackId withMessage:@"支付成功"];
+                [self successWithCallbackID:self.currentCallbackId withMessage:@"支付成功"];
             } else {
-                [self failWithCallbackID:command.callbackId withMessage:@"支付失败"];
+                [self failWithCallbackID:self.currentCallbackId withMessage:@"支付失败"];
             }
             
             NSLog(@"reslut = %@",resultDic);
         }];
 
+    }
+}
+
+- (void)handleOpenURL:(NSNotification *)notification
+{
+    NSURL* url = [notification object];
+    
+    if ([url isKindOfClass:[NSURL class]] && [url.scheme isEqualToString:self.partner])
+    {
+        [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
+            if ([[resultDic objectForKey:@"resultStatus"]  isEqual: @"9000"]) {
+                [self successWithCallbackID:self.currentCallbackId withMessage:@"支付成功"];
+            } else {
+                [self failWithCallbackID:self.currentCallbackId withMessage:@"支付失败"];
+            }
+        }];
     }
 }
 
