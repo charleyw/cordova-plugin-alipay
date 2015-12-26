@@ -41,9 +41,8 @@ public class AliPayPlugin extends CordovaPlugin {
             String subject = arguments.getString("subject");
             String body = arguments.getString("body");
             String price = arguments.getString("price");
-            String fromUrlScheme = arguments.getString("fromUrlScheme");
             String notifyUrl = arguments.getString("notifyUrl");
-            this.pay(tradeNo, subject, body, price, fromUrlScheme, notifyUrl, callbackContext);
+            this.pay(tradeNo, subject, body, price, notifyUrl, callbackContext);
         } catch (JSONException e) {
             callbackContext.error(new JSONObject());
             e.printStackTrace();
@@ -52,7 +51,7 @@ public class AliPayPlugin extends CordovaPlugin {
         return true;
     }
 
-    public void pay(String tradeNo, String subject, String body, String price, final String fromUrlScheme, String notifyUrl, final CallbackContext callbackContext) {
+    public void pay(String tradeNo, String subject, String body, String price, String notifyUrl, final CallbackContext callbackContext) {
         // 订单
         String orderInfo = createRequestParameters(subject, body, price, tradeNo, notifyUrl);
 
