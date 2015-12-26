@@ -16,6 +16,7 @@
 
   <preference name="PARTNER_ID"/>
   <preference name="SELLER_ACCOUNT"/>
+  <preference name="PRIVATE_KEY"/>
 
   <asset src="www/alipay.js" target="js/alipay.js"/>
 
