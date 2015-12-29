@@ -35,6 +35,8 @@ window.alipay.pay({
 * body 订单详情，没找到会显示哪里
 * price 价格，支持两位小数
 
+第一个callback是成功之后的callback，第二个callback是失败之后的callback，会有errorMsg传出来。
+
 ## 手动安装
 1. 使用git命令将插件下载到本地，并标记为$CORDOVA_PLUGIN_DIR
 
