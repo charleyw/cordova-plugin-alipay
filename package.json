@@ -1,5 +1,5 @@
 {
-    "version": "0.0.2",
+    "version": "0.8.0",
     "name": "cordova-plugin-alipay",
     "cordova_name": "AlipayPlugin",
     "description": "支付宝支付插件，alipay payment",
@@ -7,6 +7,7 @@
     "repo": "https://github.com/charleyw/cordova-plugin-alipay",
     "issue": "https://github.com/charleyw/cordova-plugin-alipay/issues",
     "keywords": [
+        "cordova",
         "alipay",
         "payment"
     ],
