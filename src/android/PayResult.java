@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class PayResult {
     private String resultStatus;
@@ -36,6 +37,14 @@ public class PayResult {
                 + "};result={" + result + "}";
     }
 
+    public JSONObject toJson(){
+        Map<String, String> payResultsMap = new HashMap<String, String>() {{
+            put("resultStatus", resultStatus);
+            put("memo", memo);
+            put("result", result);
+        }};
+        return new JSONObject(payResultsMap);
+    }
     private String gatValue(String content, String key) {
         String prefix = key + "={";
         return content.substring(content.indexOf(prefix) + prefix.length(),

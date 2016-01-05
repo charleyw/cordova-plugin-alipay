@@ -77,14 +77,14 @@ public class AliPayPlugin extends CordovaPlugin {
                 String result = alipay.pay(payInfo);
                 PayResult payResult = new PayResult(result);
                 if (TextUtils.equals(payResult.getResultStatus(), "9000")) {
-                    callbackContext.success(payResult.getMemo());
+                    callbackContext.success(payResult.toJson());
                 } else {
                     // 判断resultStatus 为非“9000”则代表可能支付失败
                     // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
                     if (TextUtils.equals(payResult.getResultStatus(), "8000")) {
-                        callbackContext.success(payResult.getMemo());
+                        callbackContext.success(payResult.toJson());
                     } else {
-                        callbackContext.error(payResult.getMemo());
+                        callbackContext.error(payResult.toJson());
                     }
                 }
             }
