@@ -79,9 +79,9 @@
 
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:self.partner callback:^(NSDictionary *resultDic) {
             if ([[resultDic objectForKey:@"resultStatus"]  isEqual: @"9000"]) {
-                [self successWithCallbackID:self.currentCallbackId withMessage:@"支付成功"];
+                [self successWithCallbackID:self.currentCallbackId messageAsDictionary:resultDic];
             } else {
-                [self failWithCallbackID:self.currentCallbackId withMessage:@"支付失败"];
+                [self failWithCallbackID:self.currentCallbackId messageAsDictionary:resultDic];
             }
             
             NSLog(@"reslut = %@",resultDic);
@@ -98,9 +98,9 @@
     {
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             if ([[resultDic objectForKey:@"resultStatus"]  isEqual: @"9000"]) {
-                [self successWithCallbackID:self.currentCallbackId withMessage:@"支付成功"];
+                [self successWithCallbackID:self.currentCallbackId messageAsDictionary:resultDic];
             } else {
-                [self failWithCallbackID:self.currentCallbackId withMessage:@"支付失败"];
+                [self failWithCallbackID:self.currentCallbackId messageAsDictionary:resultDic];
             }
         }];
     }
@@ -117,4 +117,16 @@
     CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
     [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
 }
+- (void)successWithCallbackID:(NSString *)callbackID messageAsDictionary:(NSDictionary *)message
+{
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:message];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
+}
+
+- (void)failWithCallbackID:(NSString *)callbackID messageAsDictionary:(NSDictionary *)message
+{
+    CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsDictionary:message];
+    [self.commandDelegate sendPluginResult:commandResult callbackId:callbackID];
+}
+
 @end
