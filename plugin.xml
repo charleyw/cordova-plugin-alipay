@@ -79,7 +79,7 @@
               <string>alipay</string>
               <key>CFBundleURLSchemes</key>
               <array>
-                  <string>$PARTNER_ID</string>
+                  <string>a$PARTNER_ID</string>
               </array>
           </dict>
       </array>
