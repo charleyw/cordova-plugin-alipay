@@ -16,7 +16,7 @@ Cordova 支付宝支付插件
 
 	cordova plugin add $CORDOVA_PLUGIN_DIR --variable PARTNER_ID=[你的商户PID可以在账户中查询] --variable SELLER_ACCOUNT=[你的商户支付宝帐号] --variable PRIVATE_KEY=[你生成的private key]
 
-**注意**：PRIVATE_KEY的值是生成的key文件的内容，需要去掉——-BEGIN PRIVAT KEY——-和——-END PRIVATE KEY——-，以及**空格**和**换行**
+**注意**：PRIVATE_KEY的值是生成的私钥，要求是**PKCS**格式，需要去掉——-BEGIN PRIVAT KEY——-和——-END PRIVATE KEY——-，以及**空格**和**换行**。关于私钥的说明详见下面
 
 ## 使用方法
 ```
@@ -59,6 +59,12 @@ window.alipay.pay({
 * resultStatus的含义请参照这个官方文档：[客户端返回码](https://doc.open.alipay.com/doc2/detail?treeId=59&articleId=103671&docType=1)
 * memo：一般是一些纯中文的解释，出错的时候会有内容。
 * result: 是所有支付请求参数的拼接起来的字符串。
+
+### 关于私钥
+这里用的私钥一定是**PKCS**格式的，详细生成步骤请参照官方文档：[RSA私钥及公钥生成](https://doc.open.alipay.com/doc2/detail.htm?spm=0.0.0.0.WSkmo8&treeId=58&articleId=103242&docType=1)  
+
+文档中描述的这一步：`OpenSSL> pkcs8 -topk8 -inform PEM -in rsa_private_key.pem -outform PEM -nocrypt`会将生成的私钥**打印到屏幕上**，记得复制下来。
+
 
 ## 手动安装
 1. 使用git命令将插件下载到本地，并标记为$CORDOVA_PLUGIN_DIR
