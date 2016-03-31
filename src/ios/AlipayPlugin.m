@@ -10,7 +10,7 @@
     CDVViewController *viewController = (CDVViewController *)self.viewController;
     self.partner = [viewController.settings objectForKey:@"partner"];
     self.seller = [viewController.settings objectForKey:@"seller"];
-    self.privateKey = [viewController.settings objectForKey:@"private_key"];
+    self.privateKey = [viewController.settings objectForKey:@"privatekey"];
 }
 
 - (void) pay:(CDVInvokedUrlCommand*)command

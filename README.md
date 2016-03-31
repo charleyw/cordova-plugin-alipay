@@ -77,10 +77,10 @@ window.alipay.pay({
 		
 2. 修改$CORDOVA_PLUGIN_DIR/plugin.xml，将
 
-		<preference name="private_key" value="$PRIVATE_KEY" />
+		<preference name="privatekey" value="$PRIVATE_KEY" />
 改成
 
-		<preference name="PRIVATE_KEY" value="你生成的private key的内容"/>
+		<preference name="privatekey" value="你生成的private key的内容"/>
 
 	**注意**：总共有两处
 3. 安装

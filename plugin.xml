@@ -28,7 +28,7 @@
     <config-file target="res/xml/config.xml" parent="/*">
       <preference name="partner" value="$PARTNER_ID" />
       <preference name="seller" value="$SELLER_ACCOUNT" />
-      <preference name="private_key" value="$PRIVATE_KEY" />
+      <preference name="privatekey" value="$PRIVATE_KEY" />
       <feature name="AliPay">
         <param name="android-package" value="wang.imchao.plugin.alipay.AliPayPlugin"/>
         <param name="onload" value="true" />
@@ -65,7 +65,7 @@
     <config-file target="config.xml" parent="/widget">
       <preference name="partner" value="$PARTNER_ID" />
       <preference name="seller" value="$SELLER_ACCOUNT" />
-      <preference name="private_key" value="$PRIVATE_KEY" />
+      <preference name="privatekey" value="$PRIVATE_KEY" />
       <feature name="AliPay">
         <param name="ios-package" value="AlipayPlugin" />
         <param name="onload" value="true" />
