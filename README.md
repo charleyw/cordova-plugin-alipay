@@ -21,16 +21,16 @@ Cordova 支付宝支付插件
 ## 使用方法
 ```
 window.alipay.pay({
-	tradeNo: tradeNo,
-	subject: "测试标题",
-	body: "我是测试内容",
-	price: 0.02,
-	notifyUrl: "http://your.server.notify.url"
-}, function(successResults){alert(results)}, function(errorResults){alert(results)});
+    tradeNo: new Date().getTime(),
+    subject: "测试标题",
+    body: "我是测试内容",
+    price: 0.02,
+    notifyUrl: "http://your.server.notify.url"
+}, function(successResults){alert(successResults)}, function(errorResults){alert(errorResults)});
 ```
 ### 参数说明
 
-* tradeNo 这个是支付宝需要的，应该是一个唯一的ID号
+* tradeNo 这个是支付宝需要的商家支付单号，应该是一个自己生成唯一的ID号
 * subject 这个字段会显示在支付宝付款的页面
 * body 订单详情，没找到会显示哪里
 * price 价格，支持两位小数
